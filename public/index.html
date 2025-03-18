@@ -12,11 +12,15 @@
 <body>
   <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-      <a class="navbar-brand" target="_blank" href="https://github.com/meetcw/ms-ra-forwarder">ms-ra-forwarder</a>
-      <ul class="navbar-nav">
+      <a class="navbar-brand" target="_blank" href="https://github.com/libntdll/ms-ra-forwarder">ms-ra-forwarder</a>
+      <ul class="navbar-nav d-flex flex-row justify-content-between align-items-center">
+        <li class="nav-item">
+          <a class="github-button" href="https://github.com/libntdll/ms-ra-forwarder" data-size="large"
+            data-show-count="true" aria-label="Star libntdll/ms-ra-forwarder on GitHub">本项目 Star</a>
+        </li>
         <li class="nav-item">
           <a class="github-button" href="https://github.com/meetcw/ms-ra-forwarder" data-size="large"
-            data-show-count="true" aria-label="Star meetcw/ms-ra-forwarder on GitHub">Star</a>
+            data-show-count="true" aria-label="Star meetcw/ms-ra-forwarder on GitHub">原项目 Star</a>
         </li>
       </ul>
     </div>
@@ -92,8 +96,11 @@
           <div class="col">
             <button id="previewButton" type="button" class="btn btn-secondary" onclick="preview()">测试</button>
             <button type="button" class="btn btn-primary" onclick='createLegadoUrl()'>生成阅读（legado）语音引擎链接</button>
+            <button type="button" class="btn btn-primary" onclick='createIReadUrl()'>生成爱阅记导入链接</button>
+            <button type="button" class="btn btn-primary" onclick='createLegadoJSON()'>生成阅读（legado）语音引擎JSON</button>
           </div>
         </div>
+      </div>
     </form>
     <div style="height:50px"></div>
   </div>
@@ -110,7 +117,7 @@
           <div id="legadoUrlQRCode" style="text-align:center">
           </div>
           <div class="row">
-            <textarea id="legadoUrl" class="form-control" readonly rows="3" cols="2" value></textarea>
+            <textarea id="legadoUrl" class="form-control" readonly rows="15" cols="2" value></textarea>
           </div>
           <div class="row" style="margin-top: 10px;">
             <a id="legadoImportButton" class="btn btn-primary" href="">一键导入到阅读</a>
@@ -119,6 +126,50 @@
       </div>
     </div>
   </div>
+  <div id="legadoJSONModal" class="modal " tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">阅读链接</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="legadoJSONQRCode" style="text-align:center">
+          </div>
+          <div class="row">
+            <textarea id="legadoJSON" class="form-control" readonly rows="15" cols="2" value></textarea>
+          </div>
+          <div class="row" style="margin-top: 10px;">
+            <a id="legadoJSONImportButton" class="btn btn-primary" href="">阅读JSON</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="iReadUrlModal" class="modal " tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">爱阅记链接</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="iReadUrlQRCode" style="text-align:center">
+          </div>
+          <div class="row">
+            <p>音频格式暂时未支持。</p>
+          </div>
+          <div class="row">
+            <textarea id="iReadUrl" class="form-control" readonly rows="15" cols="2" value></textarea>
+          </div>
+          <div class="row" style="margin-top: 10px;">
+            <a id="iReadImportButton" class="btn btn-primary" href="">一键导入到爱阅记</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
@@ -142,8 +193,8 @@
       });
 
     function refreshVoice() {
-      let voiceElelement = document.getElementsByName('voiceName')[0];
-      voiceElelement.innerHTMl = '';
+      let voiceElement = document.getElementsByName('voiceName')[0];
+      voiceElement.innerHTMl = '';
       voices.forEach(item => {
         let option = document.createElement('option');
         option.value = item['ShortName'];
@@ -151,7 +202,7 @@
         if (item['ShortName'] == 'zh-CN-XiaoxiaoNeural') {
           option.selected = true;
         }
-        voiceElelement.append(option)
+        voiceElement.append(option)
       });
       updateConfigName();
     }
@@ -235,6 +286,79 @@
       document.getElementById('legadoUrlQRCode').innerHTML = svg;
       document.getElementById('legadoUrl').value = url;
       document.getElementById('legadoImportButton').href = 'legado://import/httpTTS?src=' + encodeURIComponent(url);
+    }
+
+    function createIReadUrl() {
+      let name = document.getElementsByName('name')[0].value;
+      let voiceName = document.getElementsByName('voiceName')[0].value;
+      let voiceFormat = document.getElementsByName('voiceFormat')[0].value;
+      let token = document.getElementsByName('token')[0].value;
+      let previewText = document.getElementsByName('previewText')[0].value;
+      let url = window.location.protocol + '//' + window.location.host + '/api/ireadnote'
+        + '?api=' + encodeURIComponent(window.location.protocol + '//' + window.location.host + '/api/aiyue')
+        + '&name=' + encodeURIComponent(name)
+        + '&voiceName=' + encodeURIComponent(voiceName)
+        // + '&voiceFormat=' + encodeURIComponent(voiceFormat)
+        + '&token=' + encodeURIComponent(token);
+      const directUrl = 'iReadNote://import/itts=' + url;
+      let svg = new QRCode(directUrl).svg();
+      let modal = new bootstrap.Modal(document.getElementById('iReadUrlModal'))
+      modal.show();
+      document.getElementById('iReadUrlQRCode').innerHTML = svg;
+      document.getElementById('iReadUrl').value = url;
+      document.getElementById('iReadImportButton').href = directUrl;
+    }
+
+    function createLegadoJSON() {
+      let name = document.getElementsByName('name')[0].value;
+      let voiceName = document.getElementsByName('voiceName')[0].value;
+      let voiceFormat = document.getElementsByName('voiceFormat')[0].value;
+      let token = document.getElementsByName('token')[0].value;
+      let previewText = document.getElementsByName('previewText')[0].value;
+
+      // 获取 13 位的时间戳
+      let timestamp = new Date().getTime();
+
+      // 生成 SSML 模板
+      let ssmlTemplate = `<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xmlns:emo="http://www.w3.org/2009/10/emotionml" version="1.0" xml:lang="en-US"><voice name="${voiceName}"><prosody rate="{{speakSpeed/50+0.9}}%" pitch="+0Hz">{{String(speakText).replace(/&/g, '&amp;').replace(/\"/g, '&quot;').replace(/'/g, '&apos;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}}</prosody></voice></speak>`;
+
+      // 生成请求体
+      let requestBody = JSON.stringify({
+        method: "POST",
+        body: ssmlTemplate
+      });
+
+      // 生成 URL
+      let url = `${window.location.protocol}//${window.location.host}/api/ra,${requestBody}`;
+
+      // 生成 JSON 数据
+      let jsonData = {
+        "id": timestamp,
+        "name": `☁ Edge TTS (${voiceName})`,
+        "url": url,
+        "loginUrl": "",
+        "loginUi": "",
+        "loginCheckJs": ""
+        
+      };
+      let jsonString = JSON.stringify(jsonData, null, 2);
+
+      // 生成二维码
+      let svg = new QRCode(jsonString).svg();
+
+      // 显示模态框
+      let modal = new bootstrap.Modal(document.getElementById('legadoJSONModal'));
+      modal.show();
+
+      // 显示二维码和JSON文本
+      document.getElementById('legadoJSONQRCode').innerHTML = svg;
+      document.getElementById('legadoJSON').value = jsonString;
+      // 复制JSON文本到剪贴板
+      navigator.clipboard.writeText(jsonString).then(() => {
+        alert('JSON已复制到剪贴板');
+      }).catch((err) => {
+        console.error('复制失败: ', err);
+      });
     }
   </script>
 </body>

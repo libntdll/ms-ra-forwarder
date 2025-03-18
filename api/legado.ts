@@ -4,7 +4,7 @@ module.exports = async (request: Request, response: Response) => {
   console.log('Import url: ' + request.url)
   let api = request.query['api']
   let name = request.query['name'] ?? '大声朗读'
-  let voiceName = request.query['voiceName'] ?? 'zh-CN-XiaoxiaoNeural'
+  let voiceName = request.query['voiceName'] ?? 'zh-CN-YunxiNeural'
   let styleName = request.query['styleName']
   let styleDegree = request.query['styleDegree']
   let voiceFormat = request.query['voiceFormat']
@@ -39,7 +39,7 @@ module.exports = async (request: Request, response: Response) => {
     (styleName
       ? `<mstts:express-as style="${styleName}" styledegree="${styleDegree}">`
       : ``) +
-    `<prosody rate="{{(speakSpeed - 10) * 2}}%" pitch="+0Hz">` +
+    `<prosody rate="{{speakSpeed/50+0.9}}" pitch="+0Hz">` +
     `{{String(speakText).replace(/&/g, '&amp;').replace(/\"/g, '&quot;').replace(/'/g, '&apos;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}}` +
     `</prosody>` +
     (styleName ? ` </mstts:express-as>` : ``) +
