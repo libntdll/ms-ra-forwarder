@@ -79,7 +79,7 @@
 
         <div class="row">
           <div>
-            <label for="token" class="form-label">凭据（TOKEN）：</label>
+            <label for="token" class="form-label">凭据(TOKEN):</label>
             <input name="token" class="form-control" type="text" value="">
             <div class="form-text">如果没有设置 TOKEN 环境变量请留空。</div>
           </div>
@@ -93,11 +93,27 @@
         </div>
         <div style="height:20px"></div>
         <div class="row">
-          <div class="col">
+          <div class="col-12 mb-3">
             <button id="previewButton" type="button" class="btn btn-secondary" onclick="preview()">测试</button>
-            <button type="button" class="btn btn-primary" onclick='createLegadoUrl()'>生成阅读（legado）语音引擎链接</button>
-            <button type="button" class="btn btn-primary" onclick='createIReadUrl()'>生成爱阅记导入链接</button>
-            <button type="button" class="btn btn-primary" onclick='createLegadoJSON()'>生成阅读（legado）语音引擎JSON</button>
+          </div>
+          <div class="col-12 mb-3">
+            <button type="button" class="btn btn-primary" onclick='createlegadoApp()'>生成阅读(APP版)语音引擎链接</button>
+          </div>
+          <div class="col-12 mb-3">
+            <button type="button" class="btn btn-primary" onclick='createlegadoServer()'>生成阅读(服务器版)语音引擎JSON</button>
+          </div>
+          <div class="col-12 mb-3">
+            <button type="button" class="btn btn-primary" onclick='createiRead()'>生成爱阅记导入链接</button>
+          </div>
+          <div class="col-12 mb-3">
+            <button type="button" class="btn btn-primary" onclick='createSourceRead()'>生成源阅读语音引擎链接</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <p style="margin-bottom: 0.2rem;">1、阅读: 支持手机扫码、一键导入阅读app; 支持读不舍手扫码导入; 支持阅读服务器版, 微信扫码复制导入</p>
+            <p style="margin-bottom: 0.2rem;">2、阅读JSON: 支持手机扫码或直接复制，并导入阅读服务器版</p>
+            <p style="margin-bottom: 0.2rem;">3、爱阅记: 支持手机扫码,、一键导入爱阅记</p>
           </div>
         </div>
       </div>
@@ -105,48 +121,54 @@
     <div style="height:50px"></div>
   </div>
 
+  <div id="legadoAppModal" class="modal " tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">阅读「APP版」链接</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="legadoAppQRCode" style="text-align:center">
+          </div>
+          <div class="row">
+            <textarea id="legadoApp" class="form-control" readonly rows="5" cols="2" value></textarea>
+          </div>
+          <div class="row" style="margin-top: 10px;">
+            <a id="legadoUrlButton" class="btn btn-primary" href="#"
+              onclick="copyToClipboard('legadoApp')">复制JSON至剪贴板</a>
+          </div>
+          <div class="row" style="margin-top: 10px;">
+            <a id="legadoImportButton" class="btn btn-primary" href="">一键导入到阅读APP</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <div id="legadoUrlModal" class="modal " tabindex="-1">
+  <div id="legadoServerModal" class="modal " tabindex="-1">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">阅读链接</h5>
+          <h5 class="modal-title">阅读「服务器版」链接</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div id="legadoUrlQRCode" style="text-align:center">
+          <div id="legadoServerQRCode" style="text-align:center">
           </div>
           <div class="row">
-            <textarea id="legadoUrl" class="form-control" readonly rows="15" cols="2" value></textarea>
+            <textarea id="legadoServerUrl" class="form-control" readonly rows="5" cols="2" value></textarea>
           </div>
           <div class="row" style="margin-top: 10px;">
-            <a id="legadoImportButton" class="btn btn-primary" href="">一键导入到阅读</a>
+            <a id="legadoServerImportButton" class="btn btn-primary" href="#"
+              onclick="copyToClipboard('legadoServerUrl')">复制JSON至剪贴板</a>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div id="legadoJSONModal" class="modal " tabindex="-1">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">阅读链接</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div id="legadoJSONQRCode" style="text-align:center">
-          </div>
-          <div class="row">
-            <textarea id="legadoJSON" class="form-control" readonly rows="15" cols="2" value></textarea>
-          </div>
-          <div class="row" style="margin-top: 10px;">
-            <a id="legadoJSONImportButton" class="btn btn-primary" href="">阅读JSON</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div id="iReadUrlModal" class="modal " tabindex="-1">
+
+  <div id="iReadModal" class="modal " tabindex="-1">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -154,16 +176,37 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div id="iReadUrlQRCode" style="text-align:center">
+          <div id="iReadQRCode" style="text-align:center">
           </div>
+          <div class="form-text">音频格式暂时未支持。</div>
           <div class="row">
-            <p>音频格式暂时未支持。</p>
-          </div>
-          <div class="row">
-            <textarea id="iReadUrl" class="form-control" readonly rows="15" cols="2" value></textarea>
+            <textarea id="iReadUrl" class="form-control" readonly rows="5" cols="2" value></textarea>
           </div>
           <div class="row" style="margin-top: 10px;">
             <a id="iReadImportButton" class="btn btn-primary" href="">一键导入到爱阅记</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="SourceReadModal" class="modal " tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">源阅读链接</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="SourceReadQRCode" style="text-align:center">
+          </div>
+          <div class="row">
+            <textarea id="SourceReadUrl" class="form-control" readonly rows="5" cols="2" value></textarea>
+          </div>
+          <div class="form-text">支持复制链接->源阅读APP->我的->语音管理->创建语音</div>
+          <div class="row" style="margin-top: 5px; margin-bottom: 10px;">
+            <a id="SourceReadButton" class="btn btn-primary" href="#"
+              onclick="copyToClipboard('SourceReadUrl')">复制源阅读链接至剪贴板</a>
           </div>
         </div>
       </div>
@@ -192,6 +235,41 @@
         alert(reason);
       });
 
+    // 自动调整 textarea 的高度
+    function autoResizeTextarea(textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = textarea.scrollHeight + 'px';
+    }
+
+    // 点击按钮复制 textarea 中的文本内容
+    function copyToClipboard(elementId) {
+      const textArea = document.getElementById(elementId);
+      if (!textArea) {
+        return;
+      }
+      const text = textArea.value;
+      if (!text) {
+        return;
+      }
+
+      // 选中文本
+      textArea.select();
+      // 执行复制操作
+      try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+          console.log('复制成功');
+        } else {
+          console.error('复制失败');
+          alert('复制失败，请手动选择文本并复制。');
+        }
+      } catch (err) {
+        console.error('复制过程中出现错误: ', err);
+        alert('复制失败，请手动选择文本并复制。');
+      }
+    };
+
+    // 刷新语音
     function refreshVoice() {
       let voiceElement = document.getElementsByName('voiceName')[0];
       voiceElement.innerHTMl = '';
@@ -199,7 +277,7 @@
         let option = document.createElement('option');
         option.value = item['ShortName'];
         option.innerText = item['FriendlyName'];
-        if (item['ShortName'] == 'zh-CN-XiaoxiaoNeural') {
+        if (item['ShortName'] == 'zh-CN-YunxiNeural') {
           option.selected = true;
         }
         voiceElement.append(option)
@@ -209,7 +287,7 @@
 
     function updateConfigName() {
       let voice = document.getElementsByName('voiceName')[0].value;
-      document.getElementsByName('name')[0].value = '大声朗读（' + voice + '）';
+      document.getElementsByName('name')[0].value = '大声朗读(' + voice + ')';
     }
 
     function createSSML(text, voiceName) {
@@ -226,6 +304,7 @@
       return ssml;
     }
 
+    // 测试
     function preview() {
       let headers = { 'Content-Type': 'text/plain' };
       let voiceName = document.getElementsByName('voiceName')[0].value;
@@ -269,7 +348,8 @@
         });
     }
 
-    function createLegadoUrl() {
+    // 阅读APP版
+    function createlegadoApp() {
       let name = document.getElementsByName('name')[0].value;
       let voiceName = document.getElementsByName('voiceName')[0].value;
       let voiceFormat = document.getElementsByName('voiceFormat')[0].value;
@@ -280,47 +360,12 @@
         + '&voiceName=' + encodeURIComponent(voiceName)
         + '&voiceFormat=' + encodeURIComponent(voiceFormat)
         + '&token=' + encodeURIComponent(token);
-      let svg = new QRCode(url).svg();
-      let modal = new bootstrap.Modal(document.getElementById('legadoUrlModal'))
-      modal.show();
-      document.getElementById('legadoUrlQRCode').innerHTML = svg;
-      document.getElementById('legadoUrl').value = url;
-      document.getElementById('legadoImportButton').href = 'legado://import/httpTTS?src=' + encodeURIComponent(url);
-    }
-
-    function createIReadUrl() {
-      let name = document.getElementsByName('name')[0].value;
-      let voiceName = document.getElementsByName('voiceName')[0].value;
-      let voiceFormat = document.getElementsByName('voiceFormat')[0].value;
-      let token = document.getElementsByName('token')[0].value;
-      let previewText = document.getElementsByName('previewText')[0].value;
-      let url = window.location.protocol + '//' + window.location.host + '/api/ireadnote'
-        + '?api=' + encodeURIComponent(window.location.protocol + '//' + window.location.host + '/api/aiyue')
-        + '&name=' + encodeURIComponent(name)
-        + '&voiceName=' + encodeURIComponent(voiceName)
-        // + '&voiceFormat=' + encodeURIComponent(voiceFormat)
-        + '&token=' + encodeURIComponent(token);
-      const directUrl = 'iReadNote://import/itts=' + url;
-      let svg = new QRCode(directUrl).svg();
-      let modal = new bootstrap.Modal(document.getElementById('iReadUrlModal'))
-      modal.show();
-      document.getElementById('iReadUrlQRCode').innerHTML = svg;
-      document.getElementById('iReadUrl').value = url;
-      document.getElementById('iReadImportButton').href = directUrl;
-    }
-
-    function createLegadoJSON() {
-      let name = document.getElementsByName('name')[0].value;
-      let voiceName = document.getElementsByName('voiceName')[0].value;
-      let voiceFormat = document.getElementsByName('voiceFormat')[0].value;
-      let token = document.getElementsByName('token')[0].value;
-      let previewText = document.getElementsByName('previewText')[0].value;
 
       // 获取 13 位的时间戳
       let timestamp = new Date().getTime();
 
       // 生成 SSML 模板
-      let ssmlTemplate = `<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xmlns:emo="http://www.w3.org/2009/10/emotionml" version="1.0" xml:lang="en-US"><voice name="${voiceName}"><prosody rate="{{speakSpeed/50+0.9}}%" pitch="+0Hz">{{String(speakText).replace(/&/g, '&amp;').replace(/\"/g, '&quot;').replace(/'/g, '&apos;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}}</prosody></voice></speak>`;
+      let ssmlTemplate = `<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xmlns:emo="http://www.w3.org/2009/10/emotionml" version="1.0" xml:lang="en-US"><voice name="${voiceName}"><prosody rate="{{speakSpeed/50+0.95}}" pitch="+0Hz">{{String(speakText).replace(/&/g, '&amp;').replace(/\"/g, '&quot;').replace(/'/g, '&apos;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}}</prosody></voice></speak>`;
 
       // 生成请求体
       let requestBody = JSON.stringify({
@@ -329,17 +374,51 @@
       });
 
       // 生成 URL
-      let url = `${window.location.protocol}//${window.location.host}/api/ra,${requestBody}`;
+      let post_url = `${window.location.protocol}//${window.location.host}/api/ra,${requestBody}`;
 
       // 生成 JSON 数据
       let jsonData = {
         "id": timestamp,
-        "name": `☁ Edge TTS (${voiceName})`,
-        "url": url,
-        "loginUrl": "",
-        "loginUi": "",
-        "loginCheckJs": ""
-        
+        "name": `EdgeTTS(${voiceName})`,
+        "url": post_url
+      };
+      let jsonString = JSON.stringify(jsonData, null, 2);
+
+
+      let svg = new QRCode(url).svg();
+      let modal = new bootstrap.Modal(document.getElementById('legadoAppModal'))
+      modal.show();
+      document.getElementById('legadoAppQRCode').innerHTML = svg;
+      document.getElementById('legadoApp').value = jsonString;
+      document.getElementById('legadoImportButton').href = 'legado://import/httpTTS?src=' + encodeURIComponent(url);
+
+      // 调用 autoResizeTextarea 函数
+      const legadoAppTextarea = document.getElementById('legadoApp');
+      autoResizeTextarea(legadoAppTextarea);
+    }
+
+    // 阅读服务器版
+    function createlegadoServer() {
+      let name = document.getElementsByName('name')[0].value;
+      let voiceName = document.getElementsByName('voiceName')[0].value;
+      let voiceFormat = document.getElementsByName('voiceFormat')[0].value;
+      let token = document.getElementsByName('token')[0].value;
+	  let previewText = document.getElementsByName('previewText')[0].value;
+
+      // 获取 13 位的时间戳
+      let timestamp = new Date().getTime();
+
+      // 生成 URL
+      let url = window.location.protocol + '//' + window.location.host + '/api/interface?'
+        + '&voiceName=' + voiceName
+        + '&format=' + voiceFormat
+        + "&rate={{speakSpeed/50+0.95}}&text={{String(speakText).replace(/&/g,'&amp;').replace(/\"/g,'&quot;').replace(/'/g,'&apos;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}}";
+
+      // 生成 JSON 数据
+      let jsonData = {
+        "id": timestamp,
+        "name": `EdgeTTS(${voiceName})`,
+        "url": url
       };
       let jsonString = JSON.stringify(jsonData, null, 2);
 
@@ -347,18 +426,81 @@
       let svg = new QRCode(jsonString).svg();
 
       // 显示模态框
-      let modal = new bootstrap.Modal(document.getElementById('legadoJSONModal'));
+      let modal = new bootstrap.Modal(document.getElementById('legadoServerModal'));
       modal.show();
 
       // 显示二维码和JSON文本
-      document.getElementById('legadoJSONQRCode').innerHTML = svg;
-      document.getElementById('legadoJSON').value = jsonString;
-      // 复制JSON文本到剪贴板
-      navigator.clipboard.writeText(jsonString).then(() => {
-        alert('JSON已复制到剪贴板');
-      }).catch((err) => {
-        console.error('复制失败: ', err);
-      });
+      document.getElementById('legadoServerQRCode').innerHTML = svg;
+      document.getElementById('legadoServerUrl').value = jsonString;
+
+      // 调用 autoResizeTextarea 函数
+      const SourceReadTextarea = document.getElementById('legadoServerUrl');
+      autoResizeTextarea(SourceReadTextarea);
+    }
+
+    // 爱阅记
+    function createiRead() {
+      let name = document.getElementsByName('name')[0].value;
+      let voiceName = document.getElementsByName('voiceName')[0].value;
+      let voiceFormat = document.getElementsByName('voiceFormat')[0].value;
+      let token = document.getElementsByName('token')[0].value;
+	  let previewText = document.getElementsByName('previewText')[0].value;
+
+      let url = window.location.protocol + '//' + window.location.host + '/api/ireadnote'
+        + '?api=' + encodeURIComponent(window.location.protocol + '//' + window.location.host + '/api/interface')
+        + '&name=' + encodeURIComponent(name)
+        + '&voiceName=' + encodeURIComponent(voiceName)
+        // + '&voiceFormat=' + encodeURIComponent(voiceFormat)
+        + '&token=' + encodeURIComponent(token);
+
+      const directUrl = 'iReadNote://import/itts=' + url;
+      let svg = new QRCode(directUrl).svg();
+      let modal = new bootstrap.Modal(document.getElementById('iReadModal'))
+      modal.show();
+      document.getElementById('iReadQRCode').innerHTML = svg;
+      document.getElementById('iReadUrl').value = url;
+      document.getElementById('iReadImportButton').href = directUrl;
+
+      // 调用 autoResizeTextarea 函数
+      const SourceReadTextarea = document.getElementById('iReadUrl');
+      autoResizeTextarea(SourceReadTextarea);
+    }
+
+    // 源阅读
+    function createSourceRead() {
+      let name = document.getElementsByName('name')[0].value;
+      let voiceName = document.getElementsByName('voiceName')[0].value;
+      let voiceFormat = document.getElementsByName('voiceFormat')[0].value;
+      let token = document.getElementsByName('token')[0].value;
+	  let previewText = document.getElementsByName('previewText')[0].value;
+
+      let url = window.location.protocol + '//' + window.location.host + '/api/source_read'
+        + '?api=' + encodeURIComponent(window.location.protocol + '//' + window.location.host + '/api/interface')
+        + '&name=' + encodeURIComponent(name)
+        + '&voiceName=' + encodeURIComponent(voiceName)
+        // + '&voiceFormat=' + encodeURIComponent(voiceFormat)
+        + '&token=' + encodeURIComponent(token);
+
+      // 生成二维码
+      let svg = new QRCode(url).svg();
+
+      // 生成 URL
+      let source_url = window.location.protocol + '//' + window.location.host + '/api/interface?'
+        + '&voiceName=' + voiceName
+        + '&format=' + voiceFormat
+        + "&rate={{speakSpeed/50+0.95}}&text={{String(speakText).replace(/&/g,'&amp;').replace(/\"/g,'&quot;').replace(/'/g,'&apos;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}}";
+
+      // 显示模态框
+      let modal = new bootstrap.Modal(document.getElementById('SourceReadModal'));
+      modal.show();
+
+      // 显示二维码和JSON文本
+      document.getElementById('SourceReadQRCode').innerHTML = svg;
+      document.getElementById('SourceReadUrl').value = source_url;
+
+      // 调用 autoResizeTextarea 函数
+      const SourceReadTextarea = document.getElementById('SourceReadUrl');
+      autoResizeTextarea(SourceReadTextarea);
     }
   </script>
 </body>

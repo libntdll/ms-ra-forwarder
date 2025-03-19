@@ -6,7 +6,7 @@ module.exports = async (request: Request, response: Response) => {
   console.debug(`请求正文：${request.body}`)
   let voiceName = request.query['voiceName'] ?? 'zh-CN-YunxiNeural'
   let text = request.query["text"] ?? ""
-  let speed = request.query["speed"] ?? "0.00"
+  let speed = request.query["rate"] ?? "0.00"
   let token = process.env.TOKEN
   if (token) {
     let authorization = request.headers['authorization']
@@ -26,13 +26,13 @@ module.exports = async (request: Request, response: Response) => {
       throw `无效的音频格式：${format}`
     }
     let ssml =
-        `<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xmlns:emo="http://www.w3.org/2009/10/emotionml" version="1.0" xml:lang="zh-CN">` +
-        `<voice name="${voiceName}">` +
-        `<prosody rate="${speed}%">` +
-          text+
-        `</prosody>` +
-        `</voice>` +
-        `</speak>`
+      `<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xmlns:emo="http://www.w3.org/2009/10/emotionml" version="1.0" xml:lang="zh-CN">` +
+      `<voice name="${voiceName}">` +
+      `<prosody rate="${speed}" pitch="+0Hz">` +
+      text +
+      `</prosody>` +
+      `</voice>` +
+      `</speak>`
     let result = await retry(
       async () => {
         let result = await service.convert(ssml, format as string)

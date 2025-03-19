@@ -1,21 +1,11 @@
 import { Request, Response } from "express";
-function generateRandomString(length: number): string {
-    const characters =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    let result = "";
-    const charactersLength = characters.length;
-    for (let i = 0; i < length; i++) {
-        result += characters.charAt(
-            Math.floor(Math.random() * charactersLength)
-        );
-    }
-    return result;
-}
+import { generateRandomString } from "../utils/tools";
+
 
 module.exports = async (request: Request, response: Response) => {
     console.log("Import url: " + request.url);
     const api = request.query["api"];
-    const name = request.query["name"];
+    const name = request.query["name"] ?? "EdgeTTS"
     const voiceName = request.query["voiceName"] ?? "zh-CN-YunxiNeural";
     const token = request.query["token"] ?? "";
 

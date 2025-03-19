@@ -16,8 +16,8 @@ RUN npm install --production
 
 COPY ./public ./public
 COPY --from=builder /app/dist ./dist
-ENV TOKEN= PORT=3000
+ENV PORT=3000
 
-EXPOSE $PORT
+EXPOSE 3000
 
 CMD [ "node", "./dist/app.js" ]

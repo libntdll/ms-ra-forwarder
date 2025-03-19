@@ -5,10 +5,13 @@
         "target": "ES6",
         "declaration": true,
         "outDir": "dist",
-        "sourceMap": true
+        "sourceMap": true,
+        "skipLibCheck": true
     },
     "typedocOptions": {
-        "entryPoints": ["src/app.ts"],
+        "entryPoints": [
+            "src/app.ts"
+        ],
         "out": "docs",
         "excludePrivate": true
     }
