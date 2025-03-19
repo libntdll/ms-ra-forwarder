@@ -111,9 +111,10 @@
         </div>
         <div class="row">
           <div class="col">
-            <p style="margin-bottom: 0.2rem;">1、阅读: 支持手机扫码、一键导入阅读app; 支持读不舍手扫码导入; 支持阅读服务器版, 微信扫码复制导入</p>
-            <p style="margin-bottom: 0.2rem;">2、阅读JSON: 支持手机扫码或直接复制，并导入阅读服务器版</p>
-            <p style="margin-bottom: 0.2rem;">3、爱阅记: 支持手机扫码,、一键导入爱阅记</p>
+            <p style="margin-bottom: 0.2rem;">1、阅读: 支持手机扫码、一键导入“阅读”app; 支持“读不舍手”扫码导入; 支持“阅读”服务器版, 微信扫码复制导入。</p>
+            <p style="margin-bottom: 0.2rem;">2、阅读JSON: 支持手机扫码或直接复制，并导入“阅读”服务器版。</p>
+            <p style="margin-bottom: 0.2rem;">3、爱阅记: 支持手机扫码，一键导入“爱阅记”。</p>
+            <p style="margin-bottom: 0.2rem;">4、源阅读: 支持手机扫码，一键导入“源阅读”；或手动复制创建语音。</p>
           </div>
         </div>
       </div>
@@ -412,7 +413,7 @@
       let url = window.location.protocol + '//' + window.location.host + '/api/interface?'
         + '&voiceName=' + voiceName
         + '&format=' + voiceFormat
-        + "&rate={{speakSpeed/50+0.95}}&text={{String(speakText).replace(/&/g,'&amp;').replace(/\"/g,'&quot;').replace(/'/g,'&apos;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}}";
+        + "&rate={{speakSpeed/50-0.1}}&text={{String(speakText).replace(/&/g,'&amp;').replace(/\"/g,'&quot;').replace(/'/g,'&apos;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}}";
 
       // 生成 JSON 数据
       let jsonData = {
@@ -488,7 +489,7 @@
       let source_url = window.location.protocol + '//' + window.location.host + '/api/interface?'
         + '&voiceName=' + voiceName
         + '&format=' + voiceFormat
-        + "&rate={{speakSpeed/50+0.95}}&text={{String(speakText).replace(/&/g,'&amp;').replace(/\"/g,'&quot;').replace(/'/g,'&apos;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}}";
+        + "&rate={{speakSpeed/50}}&text={{String(speakText).replace(/&/g,'&amp;').replace(/\"/g,'&quot;').replace(/'/g,'&apos;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}}";
 
       // 显示模态框
       let modal = new bootstrap.Modal(document.getElementById('SourceReadModal'));

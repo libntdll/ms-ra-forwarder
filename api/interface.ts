@@ -25,10 +25,16 @@ module.exports = async (request: Request, response: Response) => {
     if (!FORMAT_CONTENT_TYPE.has(format)) {
       throw `无效的音频格式：${format}`
     }
+
+    if (typeof speed !== 'string' || speed.trim() === '') {
+      speed = '0.00' // 默认值
+    }
+    let newSpeed = (parseFloat(speed) + 1).toString()
+
     let ssml =
       `<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xmlns:emo="http://www.w3.org/2009/10/emotionml" version="1.0" xml:lang="zh-CN">` +
       `<voice name="${voiceName}">` +
-      `<prosody rate="${speed}" pitch="+0Hz">` +
+      `<prosody rate="${newSpeed}" pitch="+0Hz">` +
       text +
       `</prosody>` +
       `</voice>` +
