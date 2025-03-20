@@ -29,12 +29,14 @@ module.exports = async (request: Request, response: Response) => {
     if (typeof speed !== 'string' || speed.trim() === '') {
       speed = '0.00' // 默认值
     }
-    let newSpeed = (parseFloat(speed) + 1).toString()
+    let newSpeed = parseFloat(speed) * 100 + '%';
+    // 控制台打印newSpeed
+    console.debug(`rate: ${newSpeed}`)
 
     let ssml =
-      `<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xmlns:emo="http://www.w3.org/2009/10/emotionml" version="1.0" xml:lang="zh-CN">` +
+      `<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xmlns:emo="http://www.w3.org/2009/10/emotionml" version="1.0" xml:lang="en-US">` +
       `<voice name="${voiceName}">` +
-      `<prosody rate="${newSpeed}" pitch="+0Hz">` +
+      `<prosody rate="${newSpeed}" pitch="0%">` +
       text +
       `</prosody>` +
       `</voice>` +

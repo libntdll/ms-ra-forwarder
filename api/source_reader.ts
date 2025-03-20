@@ -12,7 +12,7 @@ module.exports = async (request: Request, response: Response) => {
     const config = [{
         id: generateCurrentTimestamp(),
         name: `EdgeTTS(${voiceName})`,
-        url: `${api}?&voiceName=${voiceName}&format=${voiceFormat}&rate={{speakSpeed/50+0.95}}&text={{String(speakText).replace(/&/g,'&amp;').replace(/\"/g,'&quot;').replace(/'/g,'&apos;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}}`
+        url: `${api}?&voiceName=${voiceName}&format=${voiceFormat}&rate={{speakSpeed/100}}&text={{String(speakText).replace(/&/g,'&amp;').replace(/\"/g,'&quot;').replace(/'/g,'&apos;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}}`
     }];
     response.status(200).json(config);
 };
