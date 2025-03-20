@@ -147,13 +147,15 @@
           </div>
           <div class="form-text">支持复制链接->阅读APP->朗读->设置->朗读引擎->网络导入</div>
           <div class="row" style="margin-top: 5px; margin-bottom: 10px;">
-            <a id="legadoUrlButton" class="btn btn-primary" href="#" onclick="copyToClipboard('legadoAppUrl')">复制链接至剪贴板</a>
+            <a id="legadoUrlButton" class="btn btn-primary" href="#"
+              onclick="copyToClipboard('legadoAppUrl')">复制链接至剪贴板</a>
           </div>
           <div class="row">
             <textarea id="legadoApp" class="form-control" readonly rows="3" cols="2" value></textarea>
           </div>
           <div class="row" style="margin-top: 5px; margin-bottom: 10px;">
-            <a id="legadoJSONButton" class="btn btn-primary" href="#" onclick="copyToClipboard('legadoApp')">复制JSON至剪贴板</a>
+            <a id="legadoJSONButton" class="btn btn-primary" href="#"
+              onclick="copyToClipboard('legadoApp')">复制JSON至剪贴板</a>
           </div>
           <div class="row" style="margin-top: 5px; margin-bottom: 10px;">
             <a id="legadoImportButton" class="btn btn-primary" href="">一键导入到阅读APP</a>
@@ -177,7 +179,8 @@
             <textarea id="legadoServerUrl" class="form-control" readonly rows="3" cols="2" value></textarea>
           </div>
           <div class="row" style="margin-top: 5px; margin-bottom: 10px;">
-            <a id="legadoServerImportButton" class="btn btn-primary" href="#" onclick="copyToClipboard('legadoServerUrl')">复制JSON至剪贴板</a>
+            <a id="legadoServerImportButton" class="btn btn-primary" href="#"
+              onclick="copyToClipboard('legadoServerUrl')">复制JSON至剪贴板</a>
           </div>
         </div>
       </div>
@@ -221,7 +224,8 @@
           </div>
           <div class="form-text">支持复制链接->源阅读APP->我的->语音管理->创建语音</div>
           <div class="row" style="margin-top: 5px; margin-bottom: 10px;">
-            <a id="SourceReadButton" class="btn btn-primary" href="#" onclick="copyToClipboard('SourceReadUrl')">复制源阅读链接至剪贴板</a>
+            <a id="SourceReadButton" class="btn btn-primary" href="#"
+              onclick="copyToClipboard('SourceReadUrl')">复制源阅读链接至剪贴板</a>
           </div>
         </div>
       </div>
@@ -253,7 +257,6 @@
     // 获取滑块和显示值的元素
     rateSlider.addEventListener('input', function () {
       rateValue.textContent = this.value;
-      // 这里可以添加根据滑块值更新语音合成请求的逻辑
     });
 
     // 自动调整 textarea 的高度
@@ -265,29 +268,12 @@
     // 点击按钮复制 textarea 中的文本内容
     function copyToClipboard(elementId) {
       const textArea = document.getElementById(elementId);
-      if (!textArea) {
-        return;
-      }
-      const text = textArea.value;
-      if (!text) {
-        return;
-      }
+      if (!textArea || !textArea.value) return;
 
-      // 选中文本
       textArea.select();
-      // 执行复制操作
       try {
-        const successful = document.execCommand('copy');
-        if (successful) {
-          console.log('复制成功');
-        } else {
-          console.error('复制失败');
-          alert('复制失败，请手动选择文本并复制。');
-        }
-      } catch (err) {
-        console.error('复制过程中出现错误: ', err);
-        alert('复制失败，请手动选择文本并复制。');
-      }
+        document.execCommand('copy');
+      } catch { }
     };
 
     // 刷新语音
@@ -333,7 +319,6 @@
       let voiceFormat = document.getElementsByName('voiceFormat')[0].value;
       let token = document.getElementsByName('token')[0].value;
       let previewText = document.getElementsByName('previewText')[0].value;
-      // 获取滑块的当前值，并转换为百分比形式
       let rate = (parseFloat(rateSlider.value) * 100) + '%';
       let ssml = createSSML(previewText, voiceName, rate)
       if (token) {
@@ -385,30 +370,19 @@
         + '&voiceFormat=' + encodeURIComponent(voiceFormat)
         + '&token=' + encodeURIComponent(token);
 
-      // 获取 13 位的时间戳
       let timestamp = new Date().getTime();
-
-      // 生成 SSML 模板
       let ssmlTemplate = `<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xmlns:emo="http://www.w3.org/2009/10/emotionml" version="1.0" xml:lang="en-US"><voice name="${voiceName}"><prosody rate="{{(speakSpeed - 10) * 2}}%" pitch="+0Hz">{{String(speakText).replace(/&/g, '&amp;').replace(/\"/g, '&quot;').replace(/'/g, '&apos;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}}</prosody></voice></speak>`;
-
-      // 生成请求体
       let requestBody = JSON.stringify({
         method: "POST",
         body: ssmlTemplate
       });
-
-      // 生成 URL
       let post_url = `${window.location.protocol}//${window.location.host}/api/ra,${requestBody}`;
-
-      // 生成 JSON 数据
       let jsonData = {
         "id": timestamp,
         "name": `EdgeTTS(${voiceName})`,
         "url": post_url
       };
       let jsonString = JSON.stringify(jsonData, null, 2);
-
-
       let svg = new QRCode(url).svg();
       let modal = new bootstrap.Modal(document.getElementById('legadoAppModal'))
       modal.show();
@@ -417,14 +391,13 @@
       document.getElementById('legadoApp').value = jsonString;
       document.getElementById('legadoImportButton').href = 'legado://import/httpTTS?src=' + encodeURIComponent(url);
 
-      // 调用 autoResizeTextarea 函数
       const legadoAppUrlTextarea = document.getElementById('legadoAppUrl');
       autoResizeTextarea(legadoAppUrlTextarea);
       const legadoAppTextarea = document.getElementById('legadoApp');
       autoResizeTextarea(legadoAppTextarea);
     }
 
-    // 阅读SERVER版
+    // 阅读Server版
     function createlegadoServer() {
       let name = document.getElementsByName('name')[0].value;
       let voiceName = document.getElementsByName('voiceName')[0].value;
@@ -439,35 +412,23 @@
         // + '&voiceFormat=' + encodeURIComponent(voiceFormat)
         + '&token=' + encodeURIComponent(token);
 
-      // 生成二维码
       let svg = new QRCode(url).svg();
-
-      // 获取 13 位的时间戳
       let timestamp = new Date().getTime();
-
-      // 生成 URL
       let reader_url = window.location.protocol + '//' + window.location.host + '/api/interface?'
         + '&voiceName=' + voiceName
         + '&format=' + voiceFormat
         + "&rate={{(speakSpeed-10)*0.02}}&text={{String(speakText).replace(/&/g,'&amp;').replace(/\"/g,'&quot;').replace(/'/g,'&apos;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}}";
-
-      // 生成 JSON 数据
       let jsonData = {
         "id": timestamp,
         "name": `EdgeTTS(${voiceName})`,
         "url": reader_url
       };
       let jsonString = JSON.stringify(jsonData, null, 2);
-
-      // 显示模态框
       let modal = new bootstrap.Modal(document.getElementById('legadoServerModal'));
       modal.show();
-
-      // 显示二维码和JSON文本
       document.getElementById('legadoServerQRCode').innerHTML = svg;
       document.getElementById('legadoServerUrl').value = jsonString;
 
-      // 调用 autoResizeTextarea 函数
       const SourceReadTextarea = document.getElementById('legadoServerUrl');
       autoResizeTextarea(SourceReadTextarea);
     }
@@ -495,7 +456,6 @@
       document.getElementById('iReadUrl').value = url;
       document.getElementById('iReadImportButton').href = directUrl;
 
-      // 调用 autoResizeTextarea 函数
       const SourceReadTextarea = document.getElementById('iReadUrl');
       autoResizeTextarea(SourceReadTextarea);
     }
@@ -514,25 +474,17 @@
         + '&voiceName=' + encodeURIComponent(voiceName)
         // + '&voiceFormat=' + encodeURIComponent(voiceFormat)
         + '&token=' + encodeURIComponent(token);
-
-      // 生成二维码
       let svg = new QRCode(url).svg();
 
-      // 生成 URL
       let source_url = window.location.protocol + '//' + window.location.host + '/api/interface?'
         + '&voiceName=' + voiceName
         + '&format=' + voiceFormat
         + "&rate={{speakSpeed/100}}&text={{String(speakText).replace(/&/g,'&amp;').replace(/\"/g,'&quot;').replace(/'/g,'&apos;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}}";
-
-      // 显示模态框
       let modal = new bootstrap.Modal(document.getElementById('SourceReadModal'));
       modal.show();
-
-      // 显示二维码和JSON文本
       document.getElementById('SourceReadQRCode').innerHTML = svg;
       document.getElementById('SourceReadUrl').value = source_url;
 
-      // 调用 autoResizeTextarea 函数
       const SourceReadTextarea = document.getElementById('SourceReadUrl');
       autoResizeTextarea(SourceReadTextarea);
     }

@@ -1,58 +1,41 @@
-# ms-ra-forwarder-for-ifreetime
+# 大声朗读
 
-> [!NOTE]
-> 新 Cloudflare Workers 版本现已可用！[yy4382/read-aloud](https://github.com/yy4382/read-aloud)
-> 
-> 如果没有特殊需求，建议自建 Cloudflare Workers 版本。
->
-> 如果不想要自建，也可以使用我在 CF Workers 上部署的版本，可以在 [新项目的置顶 Issue](https://github.com/yy4382/read-aloud/issues/1) 中找到。
+参考 [yy4382](https://github.com/yy4382/ms-ra-forwarder-for-ifreetime) 大佬，根据自己使用习惯对常用的APP进行了增加、修改。
 
-从 ms-ra-forwarder fork 这个项目的初衷是为了能够在爱阅书香中听“晓晓”念书。
+- 添加阅读服务器版TTS语音生成
+- 添加源阅读的一键扫码添加TTS语音，同时支持手动复制网址添加；
+- WEB页面显示修改以及其它部分代码修改；
 
-由于原项目不支持爱阅书香，所以想要把原项目和 [iranee/ifreetime](https://github.com/iranee/ifreetime) 结合一下，并且写了一篇教程。
 
-结果大佬 [@justnsms](https://t.me/justnsms) 出现在了群里，并且写了这个项目对比原项目所有新增和改变的代码，非常感谢
 
-在大佬的帮助下，现在不再需要 [iranee/ifreetime](https://github.com/iranee/ifreetime) 项目和php环境，即可通过爱阅书香听书。
+<br />
+
 ## 部署
 
-建议看我的博客文章上的详细步骤来部署，README.md 中只会提供过程概要
 
-[vercel部署版](https://blog.yfi.moe/post/ifreetime-mstts-vercel/)
-
-[自建docker版](https://blog.yfi.moe/post/ifreetime-mstts-selfhost/)
-
-### 部署到vercel
-需要token
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyy4382%2Fms-ra-forwarder-for-ifreetime&env=TOKEN&project-name=ms-ra-forwarder-for-ifreetime&repository-name=ms-ra-forwarder-for-ifreetime)
-
-不需要token
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyy4382%2Fms-ra-forwarder-for-ifreetime&project-name=ms-ra-forwarder-for-ifreetime&repository-name=ms-ra-forwarder-for-ifreetime)
 
 ### docker
 
 ```bash
 docker run -d \
-  --name ifreetimeTTS \
+  --name TTS \
   -p 3000:3000 \
   --restart unless-stopped \
   -e TOKEN=example \ #可选
-  yunfinibol/ms-ra-forwarder-for-ifreetime:latest
-
+  libntdll/ms-ra-forwarder:latest
 ```
+
+
 
 ### docker compose
 
 ```yaml
-
 version: '3'
 
 services:
-  ifreetimeTTS:
-    container_name: ifreetimeTTS
-    image: yunfinibol/ms-ra-forwarder-for-ifreetime:latest
+  TTS:
+    container_name: TTS
+    image: libntdll/ms-ra-forwarder:latest
     restart: unless-stopped
     ports:
       - "3000:3000"
@@ -63,12 +46,40 @@ services:
     #  - TOKEN=自定义TOKEN
 ```
 
-## 爱阅配置：
-见我的博客：
+<br />
 
-[vercel部署版](https://blog.yfi.moe/post/ifreetime-mstts-vercel/)
+## 爱阅书香配置：
 
-[自建docker版](https://blog.yfi.moe/post/ifreetime-mstts-selfhost/)
+打开ios爱阅书香App -> 右滑进入听书配置 -> 自定义语音库 -> 创建 -> 高级自定义语音合成
 
-> [!NOTE]
-> 为了防止误操作（比如点击了原项目的部署按钮），所以原项目 README.md 请前往 [原项目](https://github.com/wxxxcxx/ms-ra-forwarder) 查看
+| 选项        | 添加项    | 添加值                                | 备注                                                                                                                                            |
+| ----------- | --------- | ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| 名称        |           |                                       | 随意                                                                                                                                            |
+| 分组        |           |                                       | 随意，相同分组名分组在一起显示                                                                                                                  |
+| TTS语音步骤 |           |                                       |                                                                                                                                                 |
+| 地址        |           | http://192.168.1.6:3000/api/interface | ip地址、端口根据实际情况修改                                                                                                                    |
+| 参数        | voiceName | zh-CN-YunxiNeural                     | zh-CN-XiaoxiaoNeural<br />zh-CN-XiaoyiNeural<br />zh-CN-YunjianNeural<br />zh-CN-YunxiNeural<br />zh-CN-YunxiaNeural<br />zh-CN-YunyangNeural等 |
+| 参数        | text      | %@                                    |                                                                                                                                                 |
+| 解析字段    | playData  | ResponseData                          |                                                                                                                                                 |
+
+![](./img/ifreetime.jpg)
+
+
+<br />
+
+## 文本转语音文档
+
+
+[文本转语音文档 - 参考](https://learn.microsoft.com/zh-cn/azure/ai-services/speech-service/index-text-to-speech)
+
+[通过语音合成标记语言 (SSML)改进合成](https://learn.microsoft.com/zh-cn/azure/ai-services/speech-service/speech-synthesis-markup)
+
+
+
+
+
+
+
+
+
+![](./img/instruction.jpg)
