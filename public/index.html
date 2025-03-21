@@ -108,26 +108,25 @@
               onclick="getDailyNews()">随机文本</button>
           </div>
           <div class="col-12 mb-3">
-            <button type="button" class="btn btn-primary" onclick='createlegadoApp()'>生成「阅读」App版语音引擎链接</button>
+            <button type="button" class="btn btn-primary" onclick='createlegadoApp()'>生成「阅读」语音引擎I</button>
           </div>
           <div class="col-12 mb-3">
-            <button type="button" class="btn btn-primary" onclick='createlegadoServer()'>生成「阅读」Server版语音引擎JSON</button>
+            <button type="button" class="btn btn-primary" onclick='createReaderServer()'>生成「阅读」语音引擎II</button>
           </div>
           <div class="col-12 mb-3">
-            <button type="button" class="btn btn-primary" onclick='createiRead()'>生成「爱阅记」导入链接</button>
+            <button type="button" class="btn btn-primary" onclick='createiRead()'>生成「爱阅记」语音引擎</button>
           </div>
           <div class="col-12 mb-3">
-            <button type="button" class="btn btn-primary" onclick='createSourceRead()'>生成「源阅读」语音引擎链接</button>
+            <button type="button" class="btn btn-primary" onclick='createSourceRead()'>生成「源阅读」语音引擎</button>
           </div>
         </div>
         <div class="row">
           <div class="col">
-            <p style="margin-bottom: 0.2rem;">1、<a href="https://github.com/gedoor/legado">阅读App版</a>:
-              支持手机扫码、一键导入「阅读」App版; 支持「阅读」Server版, 微信扫码复制导入。</p>
+            <p style="margin-bottom: 0.2rem;">1、<a href="https://github.com/gedoor/legado">阅读App版</a>: 支持手机扫码、一键导入。</p>
             <p style="margin-bottom: 0.2rem;">2、<a href="https://github.com/hectorqin/reader">阅读Server版</a>:
-              支持手机扫码或直接复制，并导入「阅读」Server版。</p>
-            <p style="margin-bottom: 0.2rem;">3、爱阅记: 支持手机扫码，一键导入「爱阅记」。</p>
-            <p style="margin-bottom: 0.2rem;">4、源阅读: 支持手机扫码，一键导入「源阅读」；或手动复制创建语音。</p>
+              支持手机扫码复制或直接复制，并导入。</p>
+            <p style="margin-bottom: 0.2rem;">3、爱阅记: 支持手机扫码，一键导入。</p>
+            <p style="margin-bottom: 0.2rem;">4、源阅读: 支持手机扫码，一键导入，或手动复制创建语音。</p>
           </div>
         </div>
       </div>
@@ -139,7 +138,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">「阅读」App版链接</h5>
+          <h5 class="modal-title">「阅读」链接</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -147,42 +146,52 @@
           <div class="row">
             <textarea id="legadoAppUrl" class="form-control" readonly rows="3" cols="2" value></textarea>
           </div>
-          <div class="form-text">支持复制链接->阅读APP->朗读->设置->朗读引擎->网络导入</div>
+          <div class="form-text">阅读APP: 支持复制链接->阅读APP->朗读->设置->朗读引擎->网络导入</div>
           <div class="row" style="margin-top: 5px; margin-bottom: 10px;">
-            <a id="legadoUrlButton" class="btn btn-primary" href="#"
-              onclick="copyToClipboard('legadoAppUrl')">复制链接至剪贴板</a>
+            <a id="legadoUrlButton" class="btn btn-primary" href="#" onclick="copyToClipboard('legadoAppUrl')">复制链接</a>
+          </div>
+          <div class="row" style="margin-top: 5px; margin-bottom: 10px;">
+            <a id="legadoImportButton" class="btn btn-primary" href="">一键导入阅读APP</a>
           </div>
           <div class="row">
             <textarea id="legadoApp" class="form-control" readonly rows="3" cols="2" value></textarea>
           </div>
+          <div class="form-text">阅读服务器版: 支持复制链接->阅读页面->HttpTTS管理->添加</div>
           <div class="row" style="margin-top: 5px; margin-bottom: 10px;">
-            <a id="legadoJSONButton" class="btn btn-primary" href="#"
-              onclick="copyToClipboard('legadoApp')">复制JSON至剪贴板</a>
-          </div>
-          <div class="row" style="margin-top: 5px; margin-bottom: 10px;">
-            <a id="legadoImportButton" class="btn btn-primary" href="">一键导入到阅读APP</a>
+            <a id="legadoJSONButton" class="btn btn-primary" href="#" onclick="copyToClipboard('legadoApp')">复制JSON</a>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div id="legadoServerModal" class="modal " tabindex="-1">
+  <div id="readerServerModal" class="modal " tabindex="-1">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">「阅读」Server版链接</h5>
+          <h5 class="modal-title">「阅读」链接</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div id="legadoServerQRCode" style="text-align:center">
-          </div>
+          <div id="readerServerQRCode" style="text-align:center"></div>
           <div class="row">
-            <textarea id="legadoServerUrl" class="form-control" readonly rows="3" cols="2" value></textarea>
+            <textarea id="readerServerUrl" class="form-control" readonly rows="3" cols="2" value></textarea>
+          </div>
+          <div class="form-text">阅读APP: 支持复制链接->阅读APP->朗读->设置->朗读引擎->网络导入</div>
+          <div class="row" style="margin-top: 5px; margin-bottom: 10px;">
+            <a id="readerServerUrlButton" class="btn btn-primary" href="#"
+              onclick="copyToClipboard('readerServerUrl')">复制链接</a>
           </div>
           <div class="row" style="margin-top: 5px; margin-bottom: 10px;">
-            <a id="legadoServerImportButton" class="btn btn-primary" href="#"
-              onclick="copyToClipboard('legadoServerUrl')">复制JSON至剪贴板</a>
+            <a id="readerServerImportButton" class="btn btn-primary" href="">一键导入阅读APP</a>
+          </div>
+          <div class="row">
+            <textarea id="readerServerJSON" class="form-control" readonly rows="3" cols="2" value></textarea>
+          </div>
+          <div class="form-text">阅读服务器版: 支持复制链接->阅读页面->HttpTTS管理->添加</div>
+          <div class="row" style="margin-top: 5px; margin-bottom: 10px;">
+            <a id="readerServerJSONButton" class="btn btn-primary" href="#"
+              onclick="copyToClipboard('readerServerJSON')">复制JSON</a>
           </div>
         </div>
       </div>
@@ -204,7 +213,7 @@
             <textarea id="iReadUrl" class="form-control" readonly rows="3" cols="2" value></textarea>
           </div>
           <div class="row" style="margin-top: 5px; margin-bottom: 10px;">
-            <a id="iReadImportButton" class="btn btn-primary" href="">一键导入到爱阅记</a>
+            <a id="iReadImportButton" class="btn btn-primary" href="">一键导入爱阅记</a>
           </div>
         </div>
       </div>
@@ -227,7 +236,7 @@
           <div class="form-text">支持复制链接->源阅读APP->我的->语音管理->创建语音</div>
           <div class="row" style="margin-top: 5px; margin-bottom: 10px;">
             <a id="SourceReadButton" class="btn btn-primary" href="#"
-              onclick="copyToClipboard('SourceReadUrl')">复制源阅读链接至剪贴板</a>
+              onclick="copyToClipboard('SourceReadUrl')">复制链接</a>
           </div>
         </div>
       </div>
@@ -467,7 +476,7 @@
     }
 
     // 阅读Server版
-    function createlegadoServer() {
+    function createReaderServer() {
       let name = document.getElementsByName('name')[0].value;
       let voiceName = document.getElementsByName('voiceName')[0].value;
       let voiceFormat = document.getElementsByName('voiceFormat')[0].value;
@@ -493,13 +502,18 @@
         "url": reader_url
       };
       let jsonString = JSON.stringify(jsonData, null, 2);
-      let modal = new bootstrap.Modal(document.getElementById('legadoServerModal'));
+      let modal = new bootstrap.Modal(document.getElementById('readerServerModal'));
       modal.show();
-      document.getElementById('legadoServerQRCode').innerHTML = svg;
-      document.getElementById('legadoServerUrl').value = jsonString;
 
-      const SourceReadTextarea = document.getElementById('legadoServerUrl');
-      autoResizeTextarea(SourceReadTextarea);
+      document.getElementById('readerServerQRCode').innerHTML = svg;
+      document.getElementById('readerServerUrl').value = url;
+      document.getElementById('readerServerJSON').value = jsonString;
+      document.getElementById('readerServerImportButton').href = 'legado://import/httpTTS?src=' + encodeURIComponent(url);
+
+      const SourceReadUrlTextarea = document.getElementById('readerServerUrl');
+      autoResizeTextarea(SourceReadUrlTextarea);
+      const SourceReadJSONTextarea = document.getElementById('readerServerJSON');
+      autoResizeTextarea(SourceReadJSONTextarea);
     }
 
     // 爱阅记
