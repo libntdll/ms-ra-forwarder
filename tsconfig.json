@@ -2,7 +2,7 @@
     "compilerOptions": {
         "moduleResolution": "node",
         "module": "commonjs",
-        "target": "ES6",
+        "target": "ES2021",
         "declaration": true,
         "outDir": "dist",
         "sourceMap": true,
@@ -10,7 +10,7 @@
     },
     "typedocOptions": {
         "entryPoints": [
-            "src/app.ts"
+            "app.ts"
         ],
         "out": "docs",
         "excludePrivate": true

@@ -1,5 +1,6 @@
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
+import './config';
 
 const app = express()
 
@@ -17,5 +18,6 @@ app.get('/api/source_reader', require('./api/source_reader'))
 app.get('/api/interface', require('./api/interface'))
 
 app.listen(port, () => {
-  console.info(`应用正在监听 ${port} 端口`)
+  console.debug(`DEBUG: ${globalThis.DEBUG}`);
+  globalThis.DEBUG && console.info(`应用正在监听 ${port} 端口`)
 })
