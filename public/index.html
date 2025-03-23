@@ -707,7 +707,7 @@
       let previewText = document.getElementsByName('previewText')[0].value;
 
       let url = window.location.protocol + '//' + window.location.host + '/api/reader'
-        + '?api=' + encodeURIComponent(window.location.protocol + '//' + window.location.host + '/api/interface')
+        + '?api=' + encodeURIComponent(window.location.protocol + '//' + window.location.host + '/api/tts')
         + '&name=' + encodeURIComponent(name)
         + '&voiceName=' + encodeURIComponent(voiceName)
         + '&voiceFormat=' + encodeURIComponent(voiceFormat)
@@ -715,7 +715,7 @@
 
       let svg = new QRCode(url).svg();
       let timestamp = new Date().getTime();
-      let reader_url = window.location.protocol + '//' + window.location.host + '/api/interface?'
+      let reader_url = window.location.protocol + '//' + window.location.host + '/api/tts?'
         + '&voiceName=' + voiceName
         + '&voiceFormat=' + voiceFormat
         + "&rate={{(speakSpeed-10)*2}}%&pitch=0%&text={{String(speakText).replace(/&/g,'&amp;').replace(/\"/g,'&quot;').replace(/'/g,'&apos;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}}";
@@ -749,7 +749,7 @@
       let previewText = document.getElementsByName('previewText')[0].value;
 
       let url = window.location.protocol + '//' + window.location.host + '/api/ireadnote'
-        + '?api=' + encodeURIComponent(window.location.protocol + '//' + window.location.host + '/api/interface')
+        + '?api=' + encodeURIComponent(window.location.protocol + '//' + window.location.host + '/api/tts')
         + '&name=' + encodeURIComponent(name)
         + '&voiceName=' + encodeURIComponent(voiceName)
         + '&voiceFormat=' + encodeURIComponent(voiceFormat)
@@ -777,14 +777,14 @@
       let previewText = document.getElementsByName('previewText')[0].value;
 
       let url = window.location.protocol + '//' + window.location.host + '/api/source_reader'
-        + '?api=' + encodeURIComponent(window.location.protocol + '//' + window.location.host + '/api/interface')
+        + '?api=' + encodeURIComponent(window.location.protocol + '//' + window.location.host + '/api/tts')
         + '&name=' + encodeURIComponent(name)
         + '&voiceName=' + encodeURIComponent(voiceName)
         + '&voiceFormat=' + encodeURIComponent(voiceFormat)
         + '&token=' + encodeURIComponent(token);
       let svg = new QRCode(url).svg();
 
-      let source_url = window.location.protocol + '//' + window.location.host + '/api/interface?'
+      let source_url = window.location.protocol + '//' + window.location.host + '/api/tts?'
         + '&voiceName=' + voiceName
         + '&voiceFormat=' + voiceFormat
         + "&rate={{speakSpeed}}%&pitch=0%&text={{String(speakText).replace(/&/g,'&amp;').replace(/\"/g,'&quot;').replace(/'/g,'&apos;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}}";

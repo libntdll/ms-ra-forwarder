@@ -15,7 +15,7 @@ app.post('/api/ra', require('./api/ra'))
 app.get('/api/reader', require('./api/reader'))
 app.get('/api/ireadnote', require('./api/ireadnote'))
 app.get('/api/source_reader', require('./api/source_reader'))
-app.get('/api/interface', require('./api/interface'))
+app.get('/api/tts', require('./api/tts'))
 
 app.listen(port, () => {
   console.debug(`DEBUG: ${globalThis.DEBUG}`);

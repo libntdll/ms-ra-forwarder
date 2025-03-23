@@ -1,9 +1,9 @@
 version: '3'
 
 services:
-  ifreetimeTTS:
-    container_name: ifreetimeTTS
-    image: yunfinibol/ms-ra-forwarder-for-ifreetime
+  TTS:
+    container_name: TTS
+    image: libntdll/ms-ra-forwarder
     restart: unless-stopped
     ports:
       - "3000:3000"
